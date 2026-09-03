@@ -1,16 +1,30 @@
-version: '3.8'
-
 services:
+  postgresql:
+    container_name: temporal-postgresql
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - temporal-network
+    expose:
+      - 5432
+
   temporal:
     container_name: temporal-server
     image: temporalio/auto-setup:1.24.2
     ports:
       - "7233:7233"
     environment:
-      - DB=sqlite
-      - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/config/dynamicconfig/development-sqlite.yaml
-    volumes:
-      - temporal-data:/etc/temporal/data
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postgresql
+    depends_on:
+      - postgresql
     networks:
       - temporal-network
 
@@ -28,9 +42,8 @@ services:
       - temporal-network
 
 volumes:
-  temporal-data:
+  postgres-data:
 
 networks:
   temporal-network:
     driver: bridge
-

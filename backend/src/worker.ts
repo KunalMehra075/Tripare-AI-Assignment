@@ -26,7 +26,14 @@ export async function runWorker() {
 
 if (require.main === module) {
   runWorker().catch((err) => {
-    console.error('[Worker] Fatal error running Temporal worker:', err);
+    if (err.message && err.message.includes('Connection refused')) {
+      console.error('\n❌ [Worker] Could not connect to Temporal Server at localhost:7233 (Connection Refused).');
+      console.error('\nPlease start a local Temporal Server using one of these options:');
+      console.error('  Option 1 (Docker):       docker compose up -d');
+      console.error('  Option 2 (Temporal CLI): brew install temporal && temporal server start-dev\n');
+    } else {
+      console.error('[Worker] Fatal error running Temporal worker:', err);
+    }
     process.exit(1);
   });
 }
