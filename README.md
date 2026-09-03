@@ -2,7 +2,8 @@
 
 ## 🎬 Demo
 
-[Demo-Video.mov](Demo-Video.mov) 
+Checkout the demo video here: https://youtu.be/RgCfEpcda-A
+This video is also available in root directory.
 
 > **Note:** The `Demo-Video.mov` file is included in the repository root. Open it locally to see the full walkthrough of all 10 assignment scenarios.
 
