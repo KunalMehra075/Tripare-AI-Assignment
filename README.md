@@ -2,7 +2,7 @@
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/demo
+[Demo-Video.mov](Demo-Video.mov) 
 
 > **Note:** The `Demo-Video.mov` file is included in the repository root. Open it locally to see the full walkthrough of all 10 assignment scenarios.
 

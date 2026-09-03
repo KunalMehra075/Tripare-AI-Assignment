@@ -1,6 +1,5 @@
 import React from 'react';
 import { Hotel } from 'lucide-react';
-import { Badge } from './ui/badge';
 
 interface HeaderProps {
   backendOnline?: boolean;
@@ -17,9 +16,6 @@ export const Header: React.FC<HeaderProps> = ({ backendOnline = true }) => {
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-bold text-lg text-slate-900 tracking-tight">RateHop</span>
-              <Badge variant="outline" className="text-xs bg-slate-50 font-normal">
-                Temporal SDK
-              </Badge>
             </div>
             <p className="text-xs text-slate-500 hidden sm:block">
               Reliable Parallel Hotel Rate Comparator
@@ -30,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ backendOnline = true }) => {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2 text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-md border border-slate-200">
             <span className={`inline-block w-2 h-2 rounded-full ${backendOnline ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-            <span className="font-medium">{backendOnline ? 'Temporal Orchestrator Ready' : 'Connecting...'}</span>
+            <span className="font-medium">{backendOnline ? 'Temporal Backend Ready' : 'Connecting...'}</span>
           </div>
         </div>
       </div>
