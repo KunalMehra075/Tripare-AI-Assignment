@@ -1,8 +1,86 @@
 # Hotel Rate Comparator (Powered by Temporal Workflows)
 
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/demo
+
+> **Note:** The `Demo-Video.mov` file is included in the repository root. Open it locally to see the full walkthrough of all 10 assignment scenarios.
+
 A full-stack, fault-tolerant hotel rate comparison application built with **Node.js**, **TypeScript**, **Temporal SDK**, **Express.js**, and **React** styled with **shadcn/ui** and **Tailwind CSS**.
 
 The system searches and compares hotel rates across multiple mock suppliers in parallel, orchestrating real-world failure modes, retry policies, timeouts (>5s cancellation), and graceful mid-flight cancellation via Temporal Workflows.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js** >= 18.0.0 (Tested on Node 20)
+- **npm** >= 9.0.0
+- **Docker & Docker Compose** (for running local Temporal Server) OR **Temporal CLI** (`brew install temporal`)
+
+---
+
+### 1. Install Dependencies
+
+From the project root:
+```bash
+npm run install:all
+```
+Or install in each directory:
+```bash
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+---
+
+### 2. Start Temporal Server
+
+#### Option A: Using Docker Compose (Recommended)
+```bash
+docker compose up -d
+```
+This starts:
+- Temporal Server at `localhost:7233`
+- Temporal Web UI at `http://localhost:8080`
+
+#### Option B: Using Temporal CLI
+```bash
+brew install temporal
+temporal server start-dev
+```
+
+---
+
+### 3. Start Backend & Temporal Worker
+
+In two separate terminal tabs (or run from root):
+
+**Terminal 1 (Backend API & Mock Suppliers):**
+```bash
+cd backend
+npm run dev
+```
+*Backend runs on `http://localhost:3001` with mock endpoints `/supplierA/hotels` and `/supplierB/hotels`.*
+
+**Terminal 2 (Temporal Worker):**
+```bash
+cd backend
+npm run worker
+```
+*Temporal worker listens on task queue `hotel-search-queue`.*
+
+---
+
+### 4. Start Frontend
+
+**Terminal 3 (React + shadcn UI):**
+```bash
+cd frontend
+npm run dev
+```
+*Frontend runs on `http://localhost:3000` (or `5173`).*
 
 ---
 
@@ -68,77 +146,6 @@ The system searches and compares hotel rates across multiple mock suppliers in p
 | 8 | **One supplier takes >5s** | Cancels slow activity, proceeds with one result | `CancellationScope` + `sleep(5000)` aborts slow activity via `AbortSignal` |
 | 9 | **Supplier A fails 2x before success** | Succeeds within retry policy | Temporal Activity Retry Policy (`maximumAttempts: 3`) automatically retries |
 | 10 | **User cancels mid-way** | Workflow stops gracefully | Catches `isCancellation(err)` and returns `CANCELLED` status |
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- **Node.js** >= 18.0.0 (Tested on Node 20)
-- **npm** >= 9.0.0
-- **Docker & Docker Compose** (for running local Temporal Server) OR **Temporal CLI** (`brew install temporal`)
-
----
-
-### 1. Install Dependencies
-
-From the project root:
-```bash
-npm run install:all
-```
-Or install in each directory:
-```bash
-cd backend && npm install
-cd ../frontend && npm install
-```
-
----
-
-### 2. Start Temporal Server
-
-#### Option A: Using Docker Compose (Recommended)
-```bash
-docker compose up -d
-```
-This starts:
-- Temporal Server at `localhost:7233`
-- Temporal Web UI at `http://localhost:8080`
-
-#### Option B: Using Temporal CLI
-```bash
-temporal server start-dev
-```
-
----
-
-### 3. Start Backend & Temporal Worker
-
-In two separate terminal tabs (or run from root):
-
-**Terminal 1 (Backend API & Mock Suppliers):**
-```bash
-cd backend
-npm run dev
-```
-*Backend runs on `http://localhost:3001` with mock endpoints `/supplierA/hotels` and `/supplierB/hotels`.*
-
-**Terminal 2 (Temporal Worker):**
-```bash
-cd backend
-npm run worker
-```
-*Temporal worker listens on task queue `hotel-search-queue`.*
-
----
-
-### 4. Start Frontend
-
-**Terminal 3 (React + shadcn UI):**
-```bash
-cd frontend
-npm run dev
-```
-*Frontend runs on `http://localhost:3000` (or `5173`).*
 
 ---
 
@@ -270,6 +277,7 @@ Cancels an ongoing search workflow mid-flight.
 │   ├── package.json
 │   └── vite.config.ts
 │
+├── Demo-Video.mov                          # Full demo walkthrough
 ├── docker-compose.yml                      # Local Temporal server & web UI
 ├── package.json                            # Root scripts
 └── README.md
@@ -283,4 +291,4 @@ Cancels an ongoing search workflow mid-flight.
 2. **Synchronous Search API**: `/api/search-hotels` awaits the workflow result and returns the final comparison synchronously in one HTTP round-trip (standard for hotel search widgets). An asynchronous polling pattern or WebSocket could be used for long-running workflows spanning minutes.
 3. **Cancellation Scope**: When cancellation occurs mid-flight, activities use Node's `AbortSignal` via Axios to abort the underlying socket immediately, preventing lingering supplier calls.
 4. **Mock Supplier State**: Attempt counters for the retry scenario are stored in-memory in the mock supplier service, keyed by search request ID.
-
+5. **[WARN] Activity failed messages**: These are **expected** during failure/retry simulation scenarios (Scenarios 4, 5, 9). They are Temporal's retry mechanism working correctly, not crashes.
