@@ -13,3 +13,4 @@ export function formatPrice(price: number, currency: string = 'USD') {
     maximumFractionDigits: 0,
   }).format(price);
 }
+

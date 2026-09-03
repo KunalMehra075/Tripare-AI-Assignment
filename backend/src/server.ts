@@ -162,3 +162,4 @@ if (require.main === module) {
     console.log(`[Server] Mock Supplier B: http://localhost:${PORT}/supplierB/hotels`);
   });
 }
+

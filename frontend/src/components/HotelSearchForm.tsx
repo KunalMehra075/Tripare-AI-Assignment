@@ -162,3 +162,4 @@ export const HotelSearchForm: React.FC<HotelSearchFormProps> = ({
     </Card>
   );
 };
+

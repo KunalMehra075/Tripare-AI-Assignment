@@ -41,3 +41,4 @@ export async function fetchSupplierB(request: SearchRequest): Promise<HotelRate[
 
   return response.data;
 }
+

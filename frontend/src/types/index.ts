@@ -52,3 +52,4 @@ export interface SearchWorkflowResult {
   message?: string;
   timestamp: string;
 }
+

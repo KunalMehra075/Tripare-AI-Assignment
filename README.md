@@ -283,3 +283,4 @@ Cancels an ongoing search workflow mid-flight.
 2. **Synchronous Search API**: `/api/search-hotels` awaits the workflow result and returns the final comparison synchronously in one HTTP round-trip (standard for hotel search widgets). An asynchronous polling pattern or WebSocket could be used for long-running workflows spanning minutes.
 3. **Cancellation Scope**: When cancellation occurs mid-flight, activities use Node's `AbortSignal` via Axios to abort the underlying socket immediately, preventing lingering supplier calls.
 4. **Mock Supplier State**: Attempt counters for the retry scenario are stored in-memory in the mock supplier service, keyed by search request ID.
+

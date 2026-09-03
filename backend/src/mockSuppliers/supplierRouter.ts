@@ -183,3 +183,4 @@ supplierRouter.get('/supplierB/hotels', async (req: Request, res: Response) => {
   const hotels = getSampleHotels(city, 0.98);
   return res.json(hotels);
 });
+
